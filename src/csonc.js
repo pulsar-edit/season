@@ -1,10 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
 const fs = require('fs');
 const path = require('path');
 const yargs = require('yargs');
@@ -46,7 +39,7 @@ If no output file is specified then the JSON is written to standard out.\
   }
 
   const parseData = function(data) {
-    let error, object;
+    let object;
     try {
       object = CSON.parse(data);
 
@@ -55,9 +48,8 @@ If no output file is specified then the JSON is written to standard out.\
         process.exit(1);
         return;
       }
-    } catch (error1) {
-      error = error1;
-      console.error(`Parsing data failed: ${error.message}`);
+    } catch (err) {
+      console.error(`Parsing data failed: ${err.message}`);
       process.exit(1);
     }
 
@@ -66,9 +58,8 @@ If no output file is specified then the JSON is written to standard out.\
       const outputFile = path.resolve(argv.output);
       try {
         return fs.writeFileSync(outputFile, json);
-      } catch (error2) {
-        error = error2;
-        return console.error(`Writing ${outputFile} failed: ${error.code != null ? error.code : error}`);
+      } catch (err) {
+        return console.error(`Writing ${outputFile} failed: ${err.code != null ? err.code : err}`);
       }
     } else {
       return process.stdout.write(json);
@@ -78,9 +69,8 @@ If no output file is specified then the JSON is written to standard out.\
   if (inputFile) {
     try {
       return parseData(fs.readFileSync(inputFile, 'utf8'));
-    } catch (error1) {
-      const error = error1;
-      console.error(`Reading ${inputFile} failed: ${error.code != null ? error.code : error}`);
+    } catch (err) {
+      console.error(`Reading ${inputFile} failed: ${err.code != null ? err.code : err}`);
       return process.exit(1);
     }
   } else {
