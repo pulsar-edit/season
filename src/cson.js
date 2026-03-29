@@ -1,9 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
 const crypto = require('crypto');
 const path = require('path');
 
@@ -69,7 +63,7 @@ const parseContentsSync = function(objectPath, cachePath, contents, options) {
   return object;
 };
 
-var isAllCommentsAndWhitespace = function(contents) {
+const isAllCommentsAndWhitespace = function(contents) {
   const lines = contents.split('\n');
   while (lines.length > 0) {
     const line = lines[0].trim();
@@ -162,23 +156,22 @@ module.exports = {
 
     const fsOptions = Object.assign({encoding: 'utf8'}, options);
 
-    return fs.readFile(objectPath, fsOptions, (error, contents) => {
+    fs.readFile(objectPath, fsOptions, (error, contents) => {
       if (error != null) { return (typeof callback === 'function' ? callback(error) : undefined); }
       if (contents.trim().length === 0) { return (typeof callback === 'function' ? callback(null, null) : undefined); }
 
       if (csonCache && (path.extname(objectPath) === '.cson')) {
         const cachePath = getCachePath(contents);
-        return fs.stat(cachePath, function(error, stat) {
-          if ((stat != null ? stat.isFile() : undefined)) {
-            return fs.readFile(cachePath, 'utf8', function(error, cached) {
+        fs.stat(cachePath, function(error, stat) {
+          if (stat?.isFile()) {
+            fs.readFile(cachePath, 'utf8', function(error, cached) {
               let parsed;
               try {
                 parsed = parseCacheContents(cached);
-              } catch (error1) {
-                error = error1;
+              } catch(err) {
                 try {
                   parseContents(objectPath, cachePath, contents, parseOptions, callback);
-                } catch (error2) {}
+                } catch(err2) {}
                 return;
               }
               return (typeof callback === 'function' ? callback(null, parsed) : undefined);
@@ -247,7 +240,7 @@ module.exports = {
   }
 };
 
-var detectDuplicateKeys = function(key, value) {
+const detectDuplicateKeys = function(key, value) {
   if (this.hasOwnProperty(key) && (this[key] !== value)) {
     throw new Error(`Duplicate key '${key}'`);
   } else {
