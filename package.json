@@ -1,14 +1,9 @@
 {
-  "name": "season",
+  "name": "@pulsar-edit/season",
   "version": "6.0.2",
   "description": "CSON utilities",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/atom/season/raw/master/LICENSE.md"
-    }
-  ],
-  "main": "./src/cson.js",
+  "license": "MIT",
+  "main": "./lib/cson.js",
   "bin": {
     "csonc": "./bin/csonc"
   },
@@ -18,12 +13,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/atom/season.git"
+    "url": "https://github.com/pulsar-edit/season.git"
   },
   "bugs": {
-    "url": "https://github.com/atom/season/issues"
+    "url": "https://github.com/pulsar-edit/season/issues"
   },
-  "homepage": "http://atom.github.io/season",
   "keywords": [
     "cson",
     "json",
@@ -41,7 +35,7 @@
     "grunt": "~0.4.1",
     "grunt-shell": "~0.2.2",
     "grunt-coffeelint": "0.0.6",
-    "temp": "~0.5.0",
+    "temp": "^0.9.4",
     "rimraf": "~2.1.4"
   }
 }
