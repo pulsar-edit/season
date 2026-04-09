@@ -164,8 +164,7 @@ describe("CSON", function() {
   });
   describe("when converting back to an object", function() {
     it("produces the original object", function() {
-      var CSONParser, cson, evaledObject, object;
-      object = {
+      const object = {
         a: true,
         b: 20,
         c: {
@@ -175,9 +174,9 @@ describe("CSON", function() {
           f: true
         }
       };
-      cson = CSON.stringify(object);
-      CSONParser = require('cson-parser');
-      evaledObject = CSONParser.parse(cson);
+      const cson = CSON.stringify(object);
+      const CSONParser = require('cson-parser');
+      const evaledObject = CSONParser.parse(cson);
       expect(evaledObject).toEqual(object);
     });
   });
@@ -200,12 +199,11 @@ describe("CSON", function() {
   });
   describe(".resolve(objectPath)", function() {
     it("returns the path to the object file", function() {
-      var file1, file2, file3, folder1, objectDir;
-      objectDir = temp.mkdirSync('season-object-dir-');
-      file1 = path.join(objectDir, 'file1.json');
-      file2 = path.join(objectDir, 'file2.cson');
-      file3 = path.join(objectDir, 'file3.json');
-      folder1 = path.join(objectDir, 'folder1.json');
+      const objectDir = temp.mkdirSync('season-object-dir-');
+      const file1 = path.join(objectDir, 'file1.json');
+      const file2 = path.join(objectDir, 'file2.cson');
+      const file3 = path.join(objectDir, 'file3.json');
+      const folder1 = path.join(objectDir, 'folder1.json');
       fs.mkdirSync(folder1);
       fs.writeFileSync(file1, '{}');
       fs.writeFileSync(file2, '{}');
@@ -221,16 +219,14 @@ describe("CSON", function() {
     });
   });
   describe(".writeFile(objectPath, object, callback)", function() {
-    var object;
-    object = {
+    const object = {
       a: 1,
       b: 2
     };
     describe("when called with a .json path", function() {
       it("writes the object and calls back", function() {
-        var callback, jsonPath;
-        jsonPath = path.join(temp.mkdirSync('season-object-dir-'), 'file1.json');
-        callback = jasmine.createSpy('callback');
+        const jsonPath = path.join(temp.mkdirSync('season-object-dir-'), 'file1.json');
+        const callback = jasmine.createSpy('callback');
         CSON.writeFile(jsonPath, object, callback);
         waitsFor(function() {
           return callback.callCount === 1;
@@ -241,11 +237,9 @@ describe("CSON", function() {
       });
     });
     describe("when called with a .cson path", function() {
-      var csonPath;
-      csonPath = path.join(temp.mkdirSync('season-object-dir-'), 'file1.cson');
-      return it("writes the object and calls back", function() {
-        var callback;
-        callback = jasmine.createSpy('callback');
+      const csonPath = path.join(temp.mkdirSync('season-object-dir-'), 'file1.cson');
+      it("writes the object and calls back", function() {
+        const callback = jasmine.createSpy('callback');
         CSON.writeFile(csonPath, object, callback);
         waitsFor(function() {
           return callback.callCount === 1;
@@ -259,12 +253,11 @@ describe("CSON", function() {
   describe("caching", function() {
     describe("synchronous reads", function() {
       it("caches the contents of the compiled CSON files", function() {
-        var CSONParser, cacheDir, samplePath;
-        samplePath = path.join(__dirname, 'fixtures', 'sample.cson');
-        cacheDir = temp.mkdirSync('cache-dir');
+        const samplePath = path.join(__dirname, 'fixtures', 'sample.cson');
+        const cacheDir = temp.mkdirSync('cache-dir');
         CSON.setCacheDir(cacheDir);
         CSON.resetCacheStats();
-        CSONParser = require('cson-parser');
+        const CSONParser = require('cson-parser');
         spyOn(CSONParser, 'parse').andCallThrough();
         expect(CSON.getCacheHits()).toBe(0);
         expect(CSON.getCacheMisses()).toBe(0);
@@ -291,16 +284,15 @@ describe("CSON", function() {
     });
     describe("asynchronous reads", function() {
       it("caches the contents of the compiled CSON files", function() {
-        var CSONParser, cacheDir, sample, samplePath;
-        samplePath = path.join(__dirname, 'fixtures', 'sample.cson');
-        cacheDir = temp.mkdirSync('cache-dir');
+        const samplePath = path.join(__dirname, 'fixtures', 'sample.cson');
+        const cacheDir = temp.mkdirSync('cache-dir');
         CSON.setCacheDir(cacheDir);
         CSON.resetCacheStats();
-        CSONParser = require('cson-parser');
+        const CSONParser = require('cson-parser');
         spyOn(CSONParser, 'parse').andCallThrough();
         expect(CSON.getCacheHits()).toBe(0);
         expect(CSON.getCacheMisses()).toBe(0);
-        sample = null;
+        let sample = null;
         CSON.readFile(samplePath, function(error, object) {
           return sample = object;
         });
@@ -319,7 +311,7 @@ describe("CSON", function() {
           expect(CSON.getCacheMisses()).toBe(1);
           CSONParser.parse.reset();
           sample = null;
-          return CSON.readFile(samplePath, function(error, object) {
+          CSON.readFile(samplePath, function(error, object) {
             return sample = object;
           });
         });
@@ -342,14 +334,12 @@ describe("CSON", function() {
       expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'empty-line.json'))).toBeNull();
     });
     it("throws errors for invalid .cson files", function() {
-      var error, errorPath, parseError;
-      errorPath = path.join(__dirname, 'fixtures', 'syntax-error.cson');
-      parseError = null;
+      const errorPath = path.join(__dirname, 'fixtures', 'syntax-error.cson');
+      let parseError = null;
       try {
         CSON.readFileSync(errorPath);
-      } catch (_error) {
-        error = _error;
-        parseError = error;
+      } catch (err) {
+        parseError = err;
       }
       expect(parseError.path).toBe(errorPath);
       expect(parseError.filename).toBe(errorPath);
@@ -357,14 +347,12 @@ describe("CSON", function() {
       expect(parseError.location.first_column).toBe(3);
     });
     it("throws errors for invalid .json files", function() {
-      var error, errorPath, parseError;
-      errorPath = path.join(__dirname, 'fixtures', 'syntax-error.json');
-      parseError = null;
+      const errorPath = path.join(__dirname, 'fixtures', 'syntax-error.json');
+      let parseError = null;
       try {
         CSON.readFileSync(errorPath);
-      } catch (_error) {
-        error = _error;
-        parseError = error;
+      } catch (err) {
+        parseError = err;
       }
       expect(parseError.path).toBe(errorPath);
       expect(parseError.filename).toBe(errorPath);
@@ -400,8 +388,7 @@ describe("CSON", function() {
   });
   describe("readFile", function() {
     it("calls back with null for files that are all whitespace", function() {
-      var callback;
-      callback = function(error, content) {
+      const callback = function(error, content) {
         expect(error).toBeNull();
         expect(content).toBeNull();
       };
@@ -411,8 +398,7 @@ describe("CSON", function() {
       readFile(path.join(__dirname, 'fixtures', 'empty-line.json'), callback);
     });
     it("calls back with an error for files that do no exist", function() {
-      var callback;
-      callback = function(error, content) {
+      const callback = function(error, content) {
         expect(error).not.toBeNull();
         expect(content).toBeUndefined();
       };
@@ -420,18 +406,16 @@ describe("CSON", function() {
       readFile(path.join(__dirname, 'fixtures', 'this-file-does-not-exist.json'), callback);
     });
     it("calls back with null for files that are all comments", function() {
-      var callback;
-      callback = function(error, content) {
+      const callback = function(error, content) {
         expect(error).toBeNull();
-        return expect(content).toBeNull();
+        expect(content).toBeNull();
       };
       readFile(path.join(__dirname, 'fixtures', 'single-comment.cson'), callback);
       readFile(path.join(__dirname, 'fixtures', 'multi-comment.cson'), callback);
     });
     it("calls back with an error for invalid files", function() {
-      var callback, done;
-      done = false;
-      callback = function(error, content) {
+      let done = false;
+      const callback = function(error, content) {
         done = true;
         expect(error).not.toBeNull();
         expect(error.path).toEqual(path.join(__dirname, 'fixtures', 'invalid.cson'));
@@ -444,10 +428,9 @@ describe("CSON", function() {
       });
     });
     it("calls back with location information for .cson files with syntax errors", function() {
-      var callback, done, errorPath;
-      done = false;
-      errorPath = path.join(__dirname, 'fixtures', 'syntax-error.cson');
-      callback = function(parseError, content) {
+      let done = false;
+      const errorPath = path.join(__dirname, 'fixtures', 'syntax-error.cson');
+      const callback = function(parseError, content) {
         done = true;
         expect(parseError.path).toBe(errorPath);
         expect(parseError.filename).toBe(errorPath);
@@ -460,10 +443,9 @@ describe("CSON", function() {
       });
     });
     it("calls back with path information for .json files with syntax errors", function() {
-      var callback, done, errorPath;
-      done = false;
-      errorPath = path.join(__dirname, 'fixtures', 'syntax-error.json');
-      callback = function(parseError, content) {
+      let done = false;
+      const errorPath = path.join(__dirname, 'fixtures', 'syntax-error.json');
+      const callback = function(parseError, content) {
         done = true;
         expect(parseError.path).toBe(errorPath);
         expect(parseError.filename).toBe(errorPath);
@@ -475,9 +457,8 @@ describe("CSON", function() {
     });
     describe("when the allowDuplicateKeys option is set to false", function() {
       it("calls back with an error if objects contain duplicate keys", function() {
-        var done, fixturePath;
-        fixturePath = path.join(__dirname, 'fixtures', 'duplicate-keys.cson');
-        done = false;
+        const fixturePath = path.join(__dirname, 'fixtures', 'duplicate-keys.cson');
+        let done = false;
         runs(function() {
           return CSON.readFile(fixturePath, {
             allowDuplicateKeys: false
@@ -492,12 +473,12 @@ describe("CSON", function() {
         });
         runs(function() {
           done = false;
-          return CSON.readFile(fixturePath, function(err, content) {
+          CSON.readFile(fixturePath, function(err, content) {
             expect(content).toEqual({
               foo: 3,
               bar: 2
             });
-            return done = true;
+            done = true;
           });
         });
         waitsFor(function() {
@@ -506,29 +487,23 @@ describe("CSON", function() {
       });
     });
     describe("when an error is thrown by the callback", function() {
-      var uncaughtListeners;
-      uncaughtListeners = null;
+      let uncaughtListeners = null;
       beforeEach(function() {
         uncaughtListeners = process.listeners('uncaughtException');
         process.removeAllListeners('uncaughtException');
       });
       afterEach(function() {
-        var listener, _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = uncaughtListeners.length; _i < _len; _i++) {
-          listener = uncaughtListeners[_i];
-          _results.push(process.on('uncaughtException', listener));
+        for (let listener of uncaughtListeners) {
+          process.on("uncaughtException", listener);
         }
-        return _results;
       });
       it("only calls the callback once when it throws an error", function() {
-        var callback, called, uncaughtHandler;
-        called = 0;
-        callback = function() {
+        let called = 0;
+        const callback = function() {
           called++;
           throw new Error('called');
         };
-        uncaughtHandler = jasmine.createSpy('uncaughtHandler');
+        const uncaughtHandler = jasmine.createSpy('uncaughtHandler');
         process.once('uncaughtException', uncaughtHandler);
         CSON.readFile(path.join(__dirname, 'fixtures', 'sample.cson'), callback);
         waitsFor(function() {
@@ -556,9 +531,8 @@ describe("CSON", function() {
       expect(typeof parser.parse.calls[0].args[1]).toEqual("function");
     });
     it("passes options to the readFile call", function() {
-      var callback, called, cb;
-      called = 0;
-      callback = function() {
+      let called = 0;
+      const callback = function() {
         return called++;
       };
       spyOn(parser, 'parse').andCallThrough();
@@ -569,7 +543,7 @@ describe("CSON", function() {
         });
         return callback(null, "{}");
       });
-      cb = jasmine.createSpy('callback');
+      const cb = jasmine.createSpy('callback');
       CSON.readFile("/bar/blarg.cson", {
         encoding: 'cuneiform',
         allowDuplicateKeys: false
@@ -597,15 +571,14 @@ describe("CSON", function() {
       });
     });
     it("passes options to the writeFile call", function() {
-      var cb;
       spyOn(fs, 'writeFile').andCallFake(function(filePath, payload, fileOptions, callback) {
         expect(filePath).toEqual("/eh/stuff.cson");
         expect(fileOptions).toEqual({
           flag: 'x'
         });
-        return callback(null);
+        callback(null);
       });
-      cb = jasmine.createSpy('callback');
+      const cb = jasmine.createSpy('callback');
       CSON.writeFile("/eh/stuff.cson", {}, {
         flag: 'x'
       }, cb);
