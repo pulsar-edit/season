@@ -23,14 +23,14 @@ describe("CSON", function() {
   describe(".stringify(object)", function() {
     describe("when the object is undefined", function() {
       it("returns undefined", function() {
-        expect(CSON.stringify(void 0)).toBe(void 0);
+        expect(CSON.stringify(undefined)).toBe(undefined);
       });
     });
     describe("when the object is a function", function() {
       it("returns undefined", function() {
         expect(CSON.stringify(function() {
           'function';
-        })).toBe(void 0);
+        })).toBe(undefined);
       });
     });
     describe("when the object contains a function", function() {
@@ -46,7 +46,7 @@ describe("CSON", function() {
       it("does not include the key in the formatted CSON", function() {
         expect(CSON.stringify({
           b: 1,
-          c: void 0
+          c: undefined
         })).toBe('b: 1');
       });
     });
@@ -120,7 +120,7 @@ describe("CSON", function() {
       });
       describe("when the array has an undefined value", function() {
         it("formats the undefined value as null", function() {
-          expect(CSON.stringify(['a', void 0, 'b'])).toBe('[\n  "a"\n  null\n  "b"\n]');
+          expect(CSON.stringify(['a', undefined, 'b'])).toBe('[\n  "a"\n  null\n  "b"\n]');
         });
       });
       describe("when the array contains an object", function() {
