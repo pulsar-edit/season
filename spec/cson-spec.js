@@ -18,33 +18,33 @@ function readFile(filePath, callback) {
 describe("CSON", function() {
   beforeEach(function() {
     CSON.setCacheDir(null);
-    return CSON.resetCacheStats();
+    CSON.resetCacheStats();
   });
   describe(".stringify(object)", function() {
     describe("when the object is undefined", function() {
-      return it("returns undefined", function() {
-        return expect(CSON.stringify(void 0)).toBe(void 0);
+      it("returns undefined", function() {
+        expect(CSON.stringify(void 0)).toBe(void 0);
       });
     });
     describe("when the object is a function", function() {
-      return it("returns undefined", function() {
-        return expect(CSON.stringify(function() {
-          return 'function';
+      it("returns undefined", function() {
+        expect(CSON.stringify(function() {
+          'function';
         })).toBe(void 0);
       });
     });
     describe("when the object contains a function", function() {
-      return it("it gets filtered away, when not providing a visitor function", function() {
-        return expect(CSON.stringify({
+      it("it gets filtered away, when not providing a visitor function", function() {
+        expect(CSON.stringify({
           a: function() {
-            return 'function';
+            'function';
           }
         })).toBe('{}');
       });
     });
     describe("when formatting an undefined key", function() {
-      return it("does not include the key in the formatted CSON", function() {
-        return expect(CSON.stringify({
+      it("does not include the key in the formatted CSON", function() {
+        expect(CSON.stringify({
           b: 1,
           c: void 0
         })).toBe('b: 1');
@@ -52,80 +52,80 @@ describe("CSON", function() {
     });
     describe("when formatting a string", function() {
       it("returns formatted CSON", function() {
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: 'b'
         })).toBe('a: "b"');
       });
       it("doesn't escape single quotes", function() {
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: "'b'"
         })).toBe('a: "\'b\'"');
       });
       it("escapes double quotes", function() {
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: '"b"'
         })).toBe('a: "\\"b\\""');
       });
       it("turns strings with newlines into triple-apostrophe strings", function() {
-        return expect(CSON.stringify("a\nb")).toBe("'''\n  a\n  b\n'''");
+        expect(CSON.stringify("a\nb")).toBe("'''\n  a\n  b\n'''");
       });
-      return it("escapes triple-apostrophes in triple-apostrophe strings", function() {
-        return expect(CSON.stringify("a\n'''")).toBe("'''\n  a\n  \\\'''\n'''");
+      it("escapes triple-apostrophes in triple-apostrophe strings", function() {
+        expect(CSON.stringify("a\n'''")).toBe("'''\n  a\n  \\\'''\n'''");
       });
     });
     describe("when formatting a boolean", function() {
-      return it("returns formatted CSON", function() {
+      it("returns formatted CSON", function() {
         expect(CSON.stringify(true)).toBe('true');
         expect(CSON.stringify(false)).toBe('false');
         expect(CSON.stringify({
           a: true
         })).toBe('a: true');
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: false
         })).toBe('a: false');
       });
     });
     describe("when formatting a number", function() {
-      return it("returns formatted CSON", function() {
+      it("returns formatted CSON", function() {
         expect(CSON.stringify(54321.012345)).toBe('54321.012345');
         expect(CSON.stringify({
           a: 14
         })).toBe('a: 14');
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: 1.23
         })).toBe('a: 1.23');
       });
     });
     describe("when formatting null", function() {
-      return it("returns formatted CSON", function() {
+      it("returns formatted CSON", function() {
         expect(CSON.stringify(null)).toBe('null');
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: null
         })).toBe('a: null');
       });
     });
     describe("when formatting an array", function() {
       describe("when the array is empty", function() {
-        return it("puts the array on a single line", function() {
-          return expect(CSON.stringify([])).toBe("[]");
+        it("puts the array on a single line", function() {
+          expect(CSON.stringify([])).toBe("[]");
         });
       });
       it("returns formatted CSON", function() {
         expect(CSON.stringify({
           a: ['b']
         })).toBe('a: [\n  "b"\n]');
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: ['b', 4]
         })).toBe('a: [\n  "b"\n  4\n]');
       });
       describe("when the array has an undefined value", function() {
-        return it("formats the undefined value as null", function() {
-          return expect(CSON.stringify(['a', void 0, 'b'])).toBe('[\n  "a"\n  null\n  "b"\n]');
+        it("formats the undefined value as null", function() {
+          expect(CSON.stringify(['a', void 0, 'b'])).toBe('[\n  "a"\n  null\n  "b"\n]');
         });
       });
-      return describe("when the array contains an object", function() {
-        return it("wraps the object in {}", function() {
-          return expect(CSON.stringify([
+      describe("when the array contains an object", function() {
+        it("wraps the object in {}", function() {
+          expect(CSON.stringify([
             {
               a: 'b',
               a1: 'b1'
@@ -136,10 +136,10 @@ describe("CSON", function() {
         });
       });
     });
-    return describe("when formatting an object", function() {
+    describe("when formatting an object", function() {
       describe("when the object is empty", function() {
-        return it("returns {}", function() {
-          return expect(CSON.stringify({})).toBe("{}");
+        it("returns {}", function() {
+          expect(CSON.stringify({})).toBe("{}");
         });
       });
       it("returns formatted CSON", function() {
@@ -151,19 +151,19 @@ describe("CSON", function() {
         expect(CSON.stringify({
           a: {}
         })).toBe('a: {}');
-        return expect(CSON.stringify({
+        expect(CSON.stringify({
           a: []
         })).toBe('a: []');
       });
-      return it("escapes object keys", function() {
-        return expect(CSON.stringify({
+      it("escapes object keys", function() {
+        expect(CSON.stringify({
           '\\t': 3
         })).toBe('"\\\\t": 3');
       });
     });
   });
   describe("when converting back to an object", function() {
-    return it("produces the original object", function() {
+    it("produces the original object", function() {
       var CSONParser, cson, evaledObject, object;
       object = {
         a: true,
@@ -178,28 +178,28 @@ describe("CSON", function() {
       cson = CSON.stringify(object);
       CSONParser = require('cson-parser');
       evaledObject = CSONParser.parse(cson);
-      return expect(evaledObject).toEqual(object);
+      expect(evaledObject).toEqual(object);
     });
   });
   describe('.parse', function() {
-    return it('returns the javascript value', function() {
-      return expect(CSON.parse('a: "b"')).toEqual({
+    it('returns the javascript value', function() {
+      expect(CSON.parse('a: "b"')).toEqual({
         a: 'b'
       });
     });
   });
   describe(".isObjectPath(objectPath)", function() {
-    return it("returns true if the path has an object extension", function() {
+    it("returns true if the path has an object extension", function() {
       expect(CSON.isObjectPath('/test2.json')).toBe(true);
       expect(CSON.isObjectPath('/a/b.cson')).toBe(true);
       expect(CSON.isObjectPath()).toBe(false);
       expect(CSON.isObjectPath(null)).toBe(false);
       expect(CSON.isObjectPath('')).toBe(false);
-      return expect(CSON.isObjectPath('a/b/c.txt')).toBe(false);
+      expect(CSON.isObjectPath('a/b/c.txt')).toBe(false);
     });
   });
   describe(".resolve(objectPath)", function() {
-    return it("returns the path to the object file", function() {
+    it("returns the path to the object file", function() {
       var file1, file2, file3, folder1, objectDir;
       objectDir = temp.mkdirSync('season-object-dir-');
       file1 = path.join(objectDir, 'file1.json');
@@ -217,7 +217,7 @@ describe("CSON", function() {
       expect(CSON.resolve(folder1)).toBe(null);
       expect(CSON.resolve()).toBe(null);
       expect(CSON.resolve(null)).toBe(null);
-      return expect(CSON.resolve('')).toBe(null);
+      expect(CSON.resolve('')).toBe(null);
     });
   });
   describe(".writeFile(objectPath, object, callback)", function() {
@@ -227,7 +227,7 @@ describe("CSON", function() {
       b: 2
     };
     describe("when called with a .json path", function() {
-      return it("writes the object and calls back", function() {
+      it("writes the object and calls back", function() {
         var callback, jsonPath;
         jsonPath = path.join(temp.mkdirSync('season-object-dir-'), 'file1.json');
         callback = jasmine.createSpy('callback');
@@ -235,12 +235,12 @@ describe("CSON", function() {
         waitsFor(function() {
           return callback.callCount === 1;
         });
-        return runs(function() {
-          return expect(CSON.readFileSync(jsonPath)).toEqual(object);
+        runs(function() {
+          expect(CSON.readFileSync(jsonPath)).toEqual(object);
         });
       });
     });
-    return describe("when called with a .cson path", function() {
+    describe("when called with a .cson path", function() {
       var csonPath;
       csonPath = path.join(temp.mkdirSync('season-object-dir-'), 'file1.cson');
       return it("writes the object and calls back", function() {
@@ -250,15 +250,15 @@ describe("CSON", function() {
         waitsFor(function() {
           return callback.callCount === 1;
         });
-        return runs(function() {
-          return expect(CSON.readFileSync(csonPath)).toEqual(object);
+        runs(function() {
+          expect(CSON.readFileSync(csonPath)).toEqual(object);
         });
       });
     });
   });
   describe("caching", function() {
     describe("synchronous reads", function() {
-      return it("caches the contents of the compiled CSON files", function() {
+      it("caches the contents of the compiled CSON files", function() {
         var CSONParser, cacheDir, samplePath;
         samplePath = path.join(__dirname, 'fixtures', 'sample.cson');
         cacheDir = temp.mkdirSync('cache-dir');
@@ -286,11 +286,11 @@ describe("CSON", function() {
         });
         expect(CSONParser.parse.callCount).toBe(0);
         expect(CSON.getCacheHits()).toBe(1);
-        return expect(CSON.getCacheMisses()).toBe(1);
+        expect(CSON.getCacheMisses()).toBe(1);
       });
     });
-    return describe("asynchronous reads", function() {
-      return it("caches the contents of the compiled CSON files", function() {
+    describe("asynchronous reads", function() {
+      it("caches the contents of the compiled CSON files", function() {
         var CSONParser, cacheDir, sample, samplePath;
         samplePath = path.join(__dirname, 'fixtures', 'sample.cson');
         cacheDir = temp.mkdirSync('cache-dir');
@@ -326,10 +326,10 @@ describe("CSON", function() {
         waitsFor(function() {
           return sample != null;
         });
-        return runs(function() {
+        runs(function() {
           expect(CSONParser.parse.callCount).toBe(0);
           expect(CSON.getCacheHits()).toBe(1);
-          return expect(CSON.getCacheMisses()).toBe(1);
+          expect(CSON.getCacheMisses()).toBe(1);
         });
       });
     });
@@ -339,7 +339,7 @@ describe("CSON", function() {
       expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'empty.cson'))).toBeNull();
       expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'empty.json'))).toBeNull();
       expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'empty-line.cson'))).toBeNull();
-      return expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'empty-line.json'))).toBeNull();
+      expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'empty-line.json'))).toBeNull();
     });
     it("throws errors for invalid .cson files", function() {
       var error, errorPath, parseError;
@@ -354,7 +354,7 @@ describe("CSON", function() {
       expect(parseError.path).toBe(errorPath);
       expect(parseError.filename).toBe(errorPath);
       expect(parseError.location.first_line).toBe(0);
-      return expect(parseError.location.first_column).toBe(3);
+      expect(parseError.location.first_column).toBe(3);
     });
     it("throws errors for invalid .json files", function() {
       var error, errorPath, parseError;
@@ -367,17 +367,17 @@ describe("CSON", function() {
         parseError = error;
       }
       expect(parseError.path).toBe(errorPath);
-      return expect(parseError.filename).toBe(errorPath);
+      expect(parseError.filename).toBe(errorPath);
     });
     it("does not increment the cache stats when .json files are read", function() {
       expect(CSON.getCacheHits()).toBe(0);
       expect(CSON.getCacheMisses()).toBe(0);
       CSON.readFileSync(path.join(__dirname, 'fixtures', 'sample.json'));
       expect(CSON.getCacheHits()).toBe(0);
-      return expect(CSON.getCacheMisses()).toBe(0);
+      expect(CSON.getCacheMisses()).toBe(0);
     });
-    return describe("when the allowDuplicateKeys option is set to false", function() {
-      return it("throws errors if objects contain duplicate keys", function() {
+    describe("when the allowDuplicateKeys option is set to false", function() {
+      it("throws errors if objects contain duplicate keys", function() {
         expect(function() {
           return CSON.readFileSync(path.join(__dirname, 'fixtures', 'duplicate-keys.cson'), {
             allowDuplicateKeys: false
@@ -391,7 +391,7 @@ describe("CSON", function() {
             c: true
           }
         });
-        return expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'duplicate-keys.cson'))).toEqual({
+        expect(CSON.readFileSync(path.join(__dirname, 'fixtures', 'duplicate-keys.cson'))).toEqual({
           foo: 3,
           bar: 2
         });
@@ -403,21 +403,21 @@ describe("CSON", function() {
       var callback;
       callback = function(error, content) {
         expect(error).toBeNull();
-        return expect(content).toBeNull();
+        expect(content).toBeNull();
       };
       readFile(path.join(__dirname, 'fixtures', 'empty.cson'), callback);
       readFile(path.join(__dirname, 'fixtures', 'empty.json'), callback);
       readFile(path.join(__dirname, 'fixtures', 'empty-line.cson'), callback);
-      return readFile(path.join(__dirname, 'fixtures', 'empty-line.json'), callback);
+      readFile(path.join(__dirname, 'fixtures', 'empty-line.json'), callback);
     });
     it("calls back with an error for files that do no exist", function() {
       var callback;
       callback = function(error, content) {
         expect(error).not.toBeNull();
-        return expect(content).toBeUndefined();
+        expect(content).toBeUndefined();
       };
       readFile(path.join(__dirname, 'fixtures', 'this-file-does-not-exist.cson'), callback);
-      return readFile(path.join(__dirname, 'fixtures', 'this-file-does-not-exist.json'), callback);
+      readFile(path.join(__dirname, 'fixtures', 'this-file-does-not-exist.json'), callback);
     });
     it("calls back with null for files that are all comments", function() {
       var callback;
@@ -426,7 +426,7 @@ describe("CSON", function() {
         return expect(content).toBeNull();
       };
       readFile(path.join(__dirname, 'fixtures', 'single-comment.cson'), callback);
-      return readFile(path.join(__dirname, 'fixtures', 'multi-comment.cson'), callback);
+      readFile(path.join(__dirname, 'fixtures', 'multi-comment.cson'), callback);
     });
     it("calls back with an error for invalid files", function() {
       var callback, done;
@@ -436,10 +436,10 @@ describe("CSON", function() {
         expect(error).not.toBeNull();
         expect(error.path).toEqual(path.join(__dirname, 'fixtures', 'invalid.cson'));
         expect(error.message).toContain(path.join(__dirname, 'fixtures', 'invalid.cson'));
-        return expect(content).toBeUndefined();
+        expect(content).toBeUndefined();
       };
       readFile(path.join(__dirname, 'fixtures', 'invalid.cson'), callback);
-      return waitsFor(function() {
+      waitsFor(function() {
         return done;
       });
     });
@@ -452,10 +452,10 @@ describe("CSON", function() {
         expect(parseError.path).toBe(errorPath);
         expect(parseError.filename).toBe(errorPath);
         expect(parseError.location.first_line).toBe(0);
-        return expect(parseError.location.first_column).toBe(3);
+        expect(parseError.location.first_column).toBe(3);
       };
       readFile(errorPath, callback);
-      return waitsFor(function() {
+      waitsFor(function() {
         return done;
       });
     });
@@ -466,15 +466,15 @@ describe("CSON", function() {
       callback = function(parseError, content) {
         done = true;
         expect(parseError.path).toBe(errorPath);
-        return expect(parseError.filename).toBe(errorPath);
+        expect(parseError.filename).toBe(errorPath);
       };
       readFile(errorPath, callback);
-      return waitsFor(function() {
+      waitsFor(function() {
         return done;
       });
     });
     describe("when the allowDuplicateKeys option is set to false", function() {
-      return it("calls back with an error if objects contain duplicate keys", function() {
+      it("calls back with an error if objects contain duplicate keys", function() {
         var done, fixturePath;
         fixturePath = path.join(__dirname, 'fixtures', 'duplicate-keys.cson');
         done = false;
@@ -500,17 +500,17 @@ describe("CSON", function() {
             return done = true;
           });
         });
-        return waitsFor(function() {
+        waitsFor(function() {
           return done;
         });
       });
     });
-    return describe("when an error is thrown by the callback", function() {
+    describe("when an error is thrown by the callback", function() {
       var uncaughtListeners;
       uncaughtListeners = null;
       beforeEach(function() {
         uncaughtListeners = process.listeners('uncaughtException');
-        return process.removeAllListeners('uncaughtException');
+        process.removeAllListeners('uncaughtException');
       });
       afterEach(function() {
         var listener, _i, _len, _results;
@@ -521,7 +521,7 @@ describe("CSON", function() {
         }
         return _results;
       });
-      return it("only calls the callback once when it throws an error", function() {
+      it("only calls the callback once when it throws an error", function() {
         var callback, called, uncaughtHandler;
         called = 0;
         callback = function() {
@@ -534,14 +534,14 @@ describe("CSON", function() {
         waitsFor(function() {
           return called > 0;
         });
-        return runs(function() {
+        runs(function() {
           expect(called).toBe(1);
-          return expect(uncaughtHandler.callCount).toBe(1);
+          expect(uncaughtHandler.callCount).toBe(1);
         });
       });
     });
   });
-  return describe("when options are provided for the underlying fs call", function() {
+  describe("when options are provided for the underlying fs call", function() {
     it("passes options to the readFileSync call", function() {
       spyOn(fs, 'readFileSync').andReturn("{}");
       spyOn(parser, 'parse').andCallThrough();
@@ -553,7 +553,7 @@ describe("CSON", function() {
         encoding: 'cuneiform'
       });
       expect(parser.parse.calls[0].args[0]).toEqual("{}");
-      return expect(typeof parser.parse.calls[0].args[1]).toEqual("function");
+      expect(typeof parser.parse.calls[0].args[1]).toEqual("function");
     });
     it("passes options to the readFile call", function() {
       var callback, called, cb;
@@ -577,12 +577,12 @@ describe("CSON", function() {
       expect(fs.readFile).toHaveBeenCalled();
       expect(parser.parse.calls[0].args[0]).toEqual("{}");
       expect(typeof parser.parse.calls[0].args[1]).toEqual("function");
-      return expect(cb).toHaveBeenCalledWith(null, {});
+      expect(cb).toHaveBeenCalledWith(null, {});
     });
     it("passes options to the writeFileSync call", function() {
       spyOn(fs, 'writeFileSync').andCallFake(function(filePath, payload, fileOptions) {
         expect(filePath).toEqual("/stuff/wat.cson");
-        return expect(fileOptions).toEqual({
+        expect(fileOptions).toEqual({
           mode: 0x1ed
         });
       });
@@ -592,11 +592,11 @@ describe("CSON", function() {
         mode: 0x1ed
       });
       expect(fs.writeFileSync).toHaveBeenCalled();
-      return expect(fs.writeFileSync.calls[0].args[2]).toEqual({
+      expect(fs.writeFileSync.calls[0].args[2]).toEqual({
         mode: 0x1ed
       });
     });
-    return it("passes options to the writeFile call", function() {
+    it("passes options to the writeFile call", function() {
       var cb;
       spyOn(fs, 'writeFile').andCallFake(function(filePath, payload, fileOptions, callback) {
         expect(filePath).toEqual("/eh/stuff.cson");
@@ -610,7 +610,7 @@ describe("CSON", function() {
         flag: 'x'
       }, cb);
       expect(fs.writeFile).toHaveBeenCalled();
-      return expect(cb).toHaveBeenCalledWith(null);
+      expect(cb).toHaveBeenCalledWith(null);
     });
   });
 });
